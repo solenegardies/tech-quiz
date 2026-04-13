@@ -1,17 +1,17 @@
-# Simple SaaS Template
+# tech-quiz
 
-A production-ready SaaS starter built with **Next.js**, **tRPC**, **Prisma**, and **PostgreSQL** in a Turborepo monorepo.
+This repository contains **tech-quiz**, built with **Next.js**, **tRPC**, **Prisma**, and **PostgreSQL** in a Turborepo monorepo.
 
 ## Tech Stack
 
-| Layer    | Technology                                         |
-| -------- | -------------------------------------------------- |
-| Monorepo | Turborepo + pnpm workspaces                        |
-| Frontend | Next.js 16 (App Router), React 19, Tailwind CSS 4  |
-| Backend  | Express 5, tRPC 11                                 |
-| Database | PostgreSQL, Prisma 6                               |
-| Auth     | Session-based (argon2 password hashing)            |
-| Language | TypeScript throughout                              |
+| Layer    | Technology                                        |
+| -------- | ------------------------------------------------- |
+| Monorepo | Turborepo + pnpm workspaces                       |
+| Frontend | Next.js 16 (App Router), React 19, Tailwind CSS 4 |
+| Backend  | Express 5, tRPC 11                                |
+| Database | PostgreSQL, Prisma 6                              |
+| Auth     | Session-based (argon2 password hashing)           |
+| Language | TypeScript throughout                             |
 
 ## Project Structure
 

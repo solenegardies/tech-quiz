@@ -29,7 +29,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
         <nav className="flex items-center gap-6">
           <Link href="/dashboard" className="font-semibold text-gray-900">
-            SaaS
+            TechQuiz
           </Link>
           <Link href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">
             {t.nav.dashboard}

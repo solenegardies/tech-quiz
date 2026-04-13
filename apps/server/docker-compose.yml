@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: simple_saas
+      POSTGRES_DB: tech_quiz
     volumes:
       - pgdata:/var/lib/postgresql/data
 

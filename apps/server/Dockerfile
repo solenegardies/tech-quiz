@@ -6,15 +6,15 @@ FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY apps/server/package.json apps/server/
 COPY packages/shared/package.json packages/shared/
-RUN pnpm install --frozen-lockfile --filter @simple-saas-template/server...
+RUN pnpm install --frozen-lockfile --filter @tech-quiz/server...
 
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
 COPY . .
-RUN pnpm --filter @simple-saas-template/server exec prisma generate
-RUN pnpm --filter @simple-saas-template/server run build
+RUN pnpm --filter @tech-quiz/server exec prisma generate
+RUN pnpm --filter @tech-quiz/server run build
 
 FROM base AS production
 COPY --from=build /app/apps/server/dist ./dist

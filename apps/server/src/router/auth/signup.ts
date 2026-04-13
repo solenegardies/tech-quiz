@@ -4,7 +4,7 @@ import { publicProcedure } from "../trpc.js";
 import { UserRepository } from "../../repositories/userRepository.js";
 import { createSession } from "../../auth/session/index.js";
 import { setSessionCookie } from "../../auth/session/cookie.js";
-import { normalizeEmail } from "@simple-saas-template/shared";
+import { normalizeEmail } from "@tech-quiz/shared";
 
 export const signup = publicProcedure
   .input(

@@ -5,7 +5,7 @@ import { issuePasswordResetToken } from "../../auth/password-reset/index.js";
 import { sendEmail } from "../../lib/email/emailService.js";
 import { getClientIp, getUserAgent } from "../../http/clientInfo.js";
 import { env } from "../../lib/env/index.js";
-import { normalizeEmail } from "@simple-saas-template/shared";
+import { normalizeEmail } from "@tech-quiz/shared";
 
 export const requestPasswordReset = publicProcedure
   .input(z.object({ email: z.string().email() }))

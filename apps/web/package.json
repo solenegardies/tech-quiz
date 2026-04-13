@@ -1,5 +1,5 @@
 {
-  "name": "@simple-saas-template/web",
+  "name": "@tech-quiz/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,8 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@simple-saas-template/server": "workspace:*",
-    "@simple-saas-template/shared": "workspace:*",
+    "@tech-quiz/server": "workspace:*",
+    "@tech-quiz/shared": "workspace:*",
     "@tanstack/react-query": "^5.67.0",
     "@trpc/client": "^11.1.0",
     "@trpc/tanstack-react-query": "^11.1.0",

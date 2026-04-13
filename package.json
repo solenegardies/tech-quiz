@@ -1,5 +1,5 @@
 {
-  "name": "simple-saas-template",
+  "name": "tech-quiz",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -7,7 +7,7 @@
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "check": "pnpm run build --filter=@simple-saas-template/shared && turbo run typecheck test lint --parallel",
+    "check": "pnpm run build --filter=@tech-quiz/shared && turbo run typecheck test lint --parallel",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prisma:generate": "pnpm --filter server exec prisma generate && node scripts/generate-prisma-enums.mjs"
   },
