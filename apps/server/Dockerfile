@@ -1,0 +1,27 @@
+FROM node:20-alpine AS base
+RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+WORKDIR /app
+
+FROM base AS deps
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/server/package.json apps/server/
+COPY packages/shared/package.json packages/shared/
+RUN pnpm install --frozen-lockfile --filter @simple-saas-template/server...
+
+FROM base AS build
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
+COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
+COPY . .
+RUN pnpm --filter @simple-saas-template/server exec prisma generate
+RUN pnpm --filter @simple-saas-template/server run build
+
+FROM base AS production
+COPY --from=build /app/apps/server/dist ./dist
+COPY --from=build /app/apps/server/prisma ./prisma
+COPY --from=build /app/apps/server/node_modules ./node_modules
+COPY --from=build /app/apps/server/package.json ./
+
+EXPOSE 3001
+
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
