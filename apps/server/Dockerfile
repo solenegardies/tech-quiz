@@ -11,7 +11,6 @@ RUN pnpm install --frozen-lockfile --filter @tech-quiz/server...
 FROM base AS build
 COPY --from=deps /app ./
 COPY . .
-RUN pnpm --filter @tech-quiz/server exec prisma generate
 RUN pnpm --filter @tech-quiz/server run build
 
 FROM base AS production

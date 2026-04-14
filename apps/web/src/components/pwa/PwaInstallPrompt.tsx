@@ -37,11 +37,14 @@ export function PwaInstallPrompt() {
   const { t } = useTranslation();
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
-  const [showIosBanner, setShowIosBanner] = useState(false);
-  const [visible, setVisible] = useState(false);
+
+  const canShow = !isInStandaloneMode() && !wasDismissedRecently();
+  const isIosBanner = canShow && isIos();
+
+  const [visible, setVisible] = useState(isIosBanner);
 
   useEffect(() => {
-    if (isInStandaloneMode() || wasDismissedRecently()) return;
+    if (!canShow) return;
 
     // Android / Chrome — capture the native prompt
     const handler = (e: Event) => {
@@ -51,14 +54,8 @@ export function PwaInstallPrompt() {
     };
     window.addEventListener("beforeinstallprompt", handler);
 
-    // iOS — show a manual instructions banner
-    if (isIos()) {
-      setShowIosBanner(true);
-      setVisible(true);
-    }
-
     return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
+  }, [canShow]);
 
   const dismiss = useCallback(() => {
     setVisible(false);
@@ -89,7 +86,7 @@ export function PwaInstallPrompt() {
               {t.pwa.installTitle}
             </p>
 
-            {showIosBanner ? (
+            {isIosBanner ? (
               <p className="mt-1 text-xs text-[color:var(--text-soft)] leading-relaxed">
                 {t.pwa.iosInstructions}{" "}
                 <span className="inline-flex items-center align-middle">
