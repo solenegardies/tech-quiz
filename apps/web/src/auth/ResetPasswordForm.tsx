@@ -22,7 +22,7 @@ export function ResetPasswordForm() {
         queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
         router.push("/dashboard");
       },
-      onError: (err) => setError(err.message),
+      onError: (err: Error) => setError(err.message),
     }),
   );
 
@@ -33,11 +33,20 @@ export function ResetPasswordForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t.auth.resetPasswordTitle}</h1>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">
+          {t.auth.resetPasswordTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+          {t.authPages.resetPasswordSubtitle}
+        </p>
+      </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{error}</div>
+        <div className="rounded-2xl border border-[color:var(--danger-border)] bg-[color:var(--danger-soft)] p-3 text-sm text-[color:var(--danger)]">
+          {error}
+        </div>
       )}
 
       <Input
@@ -50,7 +59,7 @@ export function ResetPasswordForm() {
         autoComplete="new-password"
       />
 
-      <Button type="submit" isLoading={resetPassword.isPending} className="w-full">
+      <Button type="submit" isLoading={resetPassword.isPending} className="w-full py-3">
         {t.auth.resetPasswordButton}
       </Button>
     </form>

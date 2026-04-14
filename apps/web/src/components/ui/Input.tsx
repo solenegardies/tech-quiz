@@ -20,12 +20,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           ref={ref}
           id={inputId}
-          className={`px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent ${
-            error ? "border-red-500" : "border-gray-300"
+          className={`rounded-2xl border bg-[color:var(--surface-strong)] px-4 py-3 text-sm text-[color:var(--text-strong)] focus:border-[color:var(--accent)] focus:outline-none ${
+            error ? "border-[color:var(--danger)]" : "border-[color:var(--border)]"
           } ${className}`}
           {...props}
         />
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        {error && <p className="text-xs text-[color:var(--danger)]">{error}</p>}
       </div>
     );
   },

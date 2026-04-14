@@ -16,7 +16,7 @@ export function CreatePasswordForm() {
   const createPassword = useMutation(
     trpc.auth.createPassword.mutationOptions({
       onSuccess: () => setSuccess(true),
-      onError: (err) => setError(err.message),
+      onError: (err: Error) => setError(err.message),
     }),
   );
 
@@ -28,19 +28,28 @@ export function CreatePasswordForm() {
 
   if (success) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">{t.auth.createPasswordTitle}</h1>
-        <p className="text-green-600">{t.auth.passwordCreated}</p>
+    <div className="space-y-4">
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">{t.auth.createPasswordTitle}</h2>
+        <p className="text-[color:var(--success)]">{t.auth.passwordCreated}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t.auth.createPasswordTitle}</h1>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">
+          {t.auth.createPasswordTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+          {t.authPages.createPasswordSubtitle}
+        </p>
+      </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{error}</div>
+        <div className="rounded-2xl border border-[color:var(--danger-border)] bg-[color:var(--danger-soft)] p-3 text-sm text-[color:var(--danger)]">
+          {error}
+        </div>
       )}
 
       <Input
@@ -53,7 +62,7 @@ export function CreatePasswordForm() {
         autoComplete="new-password"
       />
 
-      <Button type="submit" isLoading={createPassword.isPending} className="w-full">
+      <Button type="submit" isLoading={createPassword.isPending} className="w-full py-3">
         {t.common.save}
       </Button>
     </form>

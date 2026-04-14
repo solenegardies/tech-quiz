@@ -3,18 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbopack": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tech-quiz/server": "workspace:*",
-    "@tech-quiz/shared": "workspace:*",
     "@tanstack/react-query": "^5.67.0",
+    "@tech-quiz/shared": "workspace:*",
     "@trpc/client": "^11.1.0",
+    "@trpc/server": "^11.1.0",
     "@trpc/tanstack-react-query": "^11.1.0",
+    "@types/canvas-confetti": "^1.9.0",
+    "canvas-confetti": "^1.9.4",
     "next": "16.2.2",
     "react": "19.2.4",
     "react-dom": "19.2.4"

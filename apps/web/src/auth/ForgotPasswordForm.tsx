@@ -26,10 +26,10 @@ export function ForgotPasswordForm() {
 
   if (sent) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">{t.auth.forgotPasswordTitle}</h1>
-        <p className="text-gray-600">{t.auth.resetEmailSent}</p>
-        <Link href="/login" className="text-sm font-medium text-gray-900 hover:underline">
+    <div className="space-y-4">
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">{t.auth.forgotPasswordTitle}</h2>
+        <p className="text-[color:var(--text-soft)]">{t.auth.resetEmailSent}</p>
+        <Link href="/login" className="text-sm font-medium text-[color:var(--text-strong)] hover:underline">
           {t.auth.loginLink}
         </Link>
       </div>
@@ -37,8 +37,15 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t.auth.forgotPasswordTitle}</h1>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">
+          {t.auth.forgotPasswordTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+          {t.authPages.forgotPasswordSubtitle}
+        </p>
+      </div>
 
       <Input
         label={t.auth.email}
@@ -49,12 +56,12 @@ export function ForgotPasswordForm() {
         autoComplete="email"
       />
 
-      <Button type="submit" isLoading={requestReset.isPending} className="w-full">
+      <Button type="submit" isLoading={requestReset.isPending} className="w-full py-3">
         {t.auth.sendResetLink}
       </Button>
 
-      <p className="text-sm text-center text-gray-600">
-        <Link href="/login" className="font-medium text-gray-900 hover:underline">
+      <p className="text-center text-sm text-[color:var(--text-soft)]">
+        <Link href="/login" className="font-medium text-[color:var(--text-strong)] hover:underline">
           {t.auth.loginLink}
         </Link>
       </p>

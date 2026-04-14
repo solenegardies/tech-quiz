@@ -1,11 +1,17 @@
 import { ForgotPasswordForm } from "@/auth/ForgotPasswordForm";
+import { AuthShell } from "@/components/layout/AuthShell";
+import { getDictionary } from "@/lib/i18n";
 
 export default function ForgotPasswordPage() {
+  const t = getDictionary();
+
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
-      <div className="w-full max-w-sm bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+    <AuthShell
+      eyebrow={t.authPages.forgotPasswordEyebrow}
+      title={t.authPages.forgotPasswordTitle}
+      description={t.authPages.forgotPasswordDescription}
+    >
         <ForgotPasswordForm />
-      </div>
-    </div>
+    </AuthShell>
   );
 }

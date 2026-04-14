@@ -22,7 +22,7 @@ export function LoginForm() {
         queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
         router.push("/dashboard");
       },
-      onError: (err) => {
+      onError: (err: Error) => {
         setError(err.message);
       },
     }),
@@ -35,11 +35,20 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t.auth.loginTitle}</h1>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">
+          {t.auth.loginTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+          {t.authPages.loginSubtitle}
+        </p>
+      </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{error}</div>
+        <div className="rounded-2xl border border-[color:var(--danger-border)] bg-[color:var(--danger-soft)] p-3 text-sm text-[color:var(--danger)]">
+          {error}
+        </div>
       )}
 
       <Input
@@ -61,18 +70,21 @@ export function LoginForm() {
       />
 
       <div className="flex justify-end">
-        <Link href="/forgot-password" className="text-sm text-gray-600 hover:text-gray-900">
+        <Link
+          href="/forgot-password"
+          className="text-sm font-medium text-[color:var(--text-soft)] hover:text-[color:var(--text-strong)]"
+        >
           {t.auth.forgotPassword}
         </Link>
       </div>
 
-      <Button type="submit" isLoading={login.isPending} className="w-full">
+      <Button type="submit" isLoading={login.isPending} className="w-full py-3">
         {t.auth.loginButton}
       </Button>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-center text-sm text-[color:var(--text-soft)]">
         {t.auth.noAccount}{" "}
-        <Link href="/signup" className="font-medium text-gray-900 hover:underline">
+        <Link href="/signup" className="font-medium text-[color:var(--text-strong)] hover:underline">
           {t.auth.signupLink}
         </Link>
       </p>

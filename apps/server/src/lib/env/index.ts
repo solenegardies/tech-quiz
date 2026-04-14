@@ -5,7 +5,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3001),
   LOG_LEVEL: z.string().default("verbose"),
   DOMAIN: z.string().default("localhost:3000"),
-  DATABASE_URL: z.string(),
+  DATABASE_URL: z.string().optional(),
   SESSION_COOKIE_NAME: z.string().default("session"),
   SENDGRID_API_KEY: z.string().optional(),
   SENDGRID_FROM_EMAIL: z.string().default("noreply@yourdomain.com"),

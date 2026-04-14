@@ -2,9 +2,273 @@
 
 :root {
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-display);
   --font-mono: var(--font-geist-mono);
+
+  /* Base - clean white/light with subtle warmth */
+  --bg: #f8f7ff;
+  --surface-strong: rgba(255, 255, 255, 0.92);
+  --surface-muted: #eef0f6;
+  --border: rgba(55, 65, 81, 0.13);
+
+  /* Text */
+  --text-strong: #1e1b4b;
+  --text-soft: #6b7280;
+
+  /* Accent - electric indigo/purple (fun & modern) */
+  --accent: #6d28d9;
+  --accent-strong: #5b21b6;
+  --accent-soft: rgba(109, 40, 217, 0.08);
+  --accent-border: rgba(109, 40, 217, 0.20);
+
+  /* Success - Duolingo feather green */
+  --success: #58cc02;
+  --success-strong: #46a302;
+  --success-soft: rgba(88, 204, 2, 0.10);
+  --success-border: rgba(88, 204, 2, 0.28);
+  --success-glow: rgba(88, 204, 2, 0.30);
+
+  /* Warning - bright amber */
+  --warning: #ff9600;
+  --warning-soft: rgba(255, 150, 0, 0.12);
+  --warning-border: rgba(255, 150, 0, 0.25);
+
+  /* Danger - coral red */
+  --danger: #ff4b4b;
+  --danger-soft: rgba(255, 75, 75, 0.10);
+  --danger-border: rgba(255, 75, 75, 0.25);
+  --danger-glow: rgba(255, 75, 75, 0.20);
+
+  /* XP / Rewards - bright gold */
+  --xp-gold: #ffc800;
+  --xp-gold-soft: rgba(255, 200, 0, 0.14);
+  --streak-orange: #ff9600;
+
+  /* Secondary fun colors */
+  --sky: #1cb0f6;
+  --sky-soft: rgba(28, 176, 246, 0.10);
+  --pink: #ff4ea3;
+  --pink-soft: rgba(255, 78, 163, 0.10);
+
+  /* Code */
+  --code-bg: #1e1b4b;
+  --code-text: #e0e7ff;
+  --code-soft: rgba(224, 231, 255, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(109, 40, 217, 0.07), transparent 35%),
+    radial-gradient(circle at top right, rgba(28, 176, 246, 0.08), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(255, 78, 163, 0.05), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(88, 204, 2, 0.04), transparent 28%),
+    linear-gradient(180deg, #faf9ff 0%, #f8f7ff 52%, #f5f4fd 100%);
+  color: var(--text-strong);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(109, 40, 217, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(109, 40, 217, 0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 80%);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 100ms ease;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+}
+
+::selection {
+  background: rgba(109, 40, 217, 0.18);
+}
+
+pre,
+code {
+  font-family: var(--font-mono), monospace;
+}
+
+/* ─── Tabular numbers for scores ─── */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Duolingo-style raised button base ─── */
+.btn-raised {
+  border-bottom-width: 4px;
+  transition: all 100ms ease;
+}
+
+.btn-raised:active:not(:disabled) {
+  border-bottom-width: 2px;
+  transform: translateY(2px);
+}
+
+/* ─── Animations ─── */
+
+/* Shake on incorrect answer */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-8px); }
+  30% { transform: translateX(8px); }
+  45% { transform: translateX(-6px); }
+  60% { transform: translateX(6px); }
+  75% { transform: translateX(-3px); }
+  90% { transform: translateX(3px); }
+}
+
+.animate-shake {
+  animation: shake 500ms ease-in-out;
+}
+
+/* XP float upward */
+@keyframes xp-float {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  60% { opacity: 1; transform: translateY(-30px) scale(1.15); }
+  100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
+}
+
+.animate-xp-float {
+  animation: xp-float 1.2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Progress bar glow on correct */
+@keyframes progress-glow {
+  0% { box-shadow: 0 0 0 0 var(--success-glow); }
+  50% { box-shadow: 0 0 16px 6px var(--success-glow); }
+  100% { box-shadow: 0 0 0 0 var(--success-glow); }
+}
+
+.animate-progress-glow {
+  animation: progress-glow 800ms ease-out;
+}
+
+/* Counter bump */
+@keyframes counter-bump {
+  0%, 100% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+}
+
+.animate-counter-bump {
+  animation: counter-bump 400ms ease-out;
+}
+
+/* Staggered option slide-in */
+@keyframes option-slide-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-option-in {
+  opacity: 0;
+  animation: option-slide-in 350ms ease-out forwards;
+}
+
+/* Correct pulse on option */
+@keyframes correct-pop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-correct-pop {
+  animation: correct-pop 400ms ease-out;
+}
+
+/* Fade in */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 400ms ease-out;
+}
+
+/* Score ring fill */
+@keyframes ring-fill {
+  from { stroke-dasharray: 0 264; }
+}
+
+.animate-ring-fill {
+  animation: ring-fill 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Spin (for loading) */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+
+/* Pulse glow for streak */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Bounce in for summary */
+@keyframes bounce-in {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 600ms ease-out;
+}
+
+/* Slide up for feedback */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slide-up 400ms ease-out;
+}
+
+/* Progress bar bouncy transition */
+.progress-bar-fill {
+  transition: width 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* PWA install banner slide up */
+@keyframes pwa-slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pwa-slide-up {
+  animation: pwa-slide-up 400ms ease-out;
 }

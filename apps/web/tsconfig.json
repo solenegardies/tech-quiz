@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@tech-quiz/shared": ["../../packages/shared/src/index.ts"],
+      "@tech-quiz/shared/enums": ["../../packages/shared/src/enums/index.ts"],
+      "@tech-quiz/shared/toolbox": ["../../packages/shared/src/toolbox/index.ts"],
+      "@tech-quiz/shared/utils": ["../../packages/shared/src/utils/email.ts"]
     }
   },
   "include": [

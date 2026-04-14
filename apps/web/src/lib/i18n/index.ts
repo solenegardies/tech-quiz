@@ -16,4 +16,9 @@ export function useTranslation() {
   return { t: dictionaries[currentLang] ?? en, lang: currentLang };
 }
 
+/** Server-component-safe accessor — returns the active dictionary. */
+export function getDictionary(): Dictionary {
+  return dictionaries[currentLang] ?? en;
+}
+
 export type { Dictionary };

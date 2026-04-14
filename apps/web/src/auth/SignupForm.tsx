@@ -24,7 +24,7 @@ export function SignupForm() {
         queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
         router.push("/dashboard");
       },
-      onError: (err) => {
+      onError: (err: Error) => {
         setError(err.message);
       },
     }),
@@ -37,14 +37,23 @@ export function SignupForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="text-2xl font-bold">{t.auth.signupTitle}</h1>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <h2 className="font-display text-3xl font-semibold text-[color:var(--text-strong)]">
+          {t.auth.signupTitle}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-[color:var(--text-soft)]">
+          {t.authPages.signupSubtitle}
+        </p>
+      </div>
 
       {error && (
-        <div className="p-3 text-sm text-red-600 bg-red-50 rounded-lg">{error}</div>
+        <div className="rounded-2xl border border-[color:var(--danger-border)] bg-[color:var(--danger-soft)] p-3 text-sm text-[color:var(--danger)]">
+          {error}
+        </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Input
           label={t.auth.firstName}
           value={firstName}
@@ -79,13 +88,13 @@ export function SignupForm() {
         autoComplete="new-password"
       />
 
-      <Button type="submit" isLoading={signup.isPending} className="w-full">
+      <Button type="submit" isLoading={signup.isPending} className="w-full py-3">
         {t.auth.signupButton}
       </Button>
 
-      <p className="text-sm text-center text-gray-600">
+      <p className="text-center text-sm text-[color:var(--text-soft)]">
         {t.auth.hasAccount}{" "}
-        <Link href="/login" className="font-medium text-gray-900 hover:underline">
+        <Link href="/login" className="font-medium text-[color:var(--text-strong)] hover:underline">
           {t.auth.loginLink}
         </Link>
       </p>

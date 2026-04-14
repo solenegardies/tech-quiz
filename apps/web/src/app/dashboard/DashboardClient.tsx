@@ -36,11 +36,11 @@ export default function DashboardClient() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="text-gray-500">Email:</span>{" "}
+              <span className="text-gray-500">{t.dashboard.emailLabel}</span>{" "}
               <span>{user?.email}</span>
             </div>
             <div>
-              <span className="text-gray-500">Role:</span>{" "}
+              <span className="text-gray-500">{t.dashboard.roleLabel}</span>{" "}
               <span className="capitalize">{user?.role?.toLowerCase()}</span>
             </div>
           </div>
