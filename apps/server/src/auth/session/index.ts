@@ -1,4 +1,4 @@
-import type { PrismaClient } from "../../generated/prisma/client.js";
+import type { PrismaClient } from "@prisma/client";
 import { generateToken, hashSecret, splitToken } from "../token/index.js";
 import { constantTimeEqual } from "../toolbox.js";
 

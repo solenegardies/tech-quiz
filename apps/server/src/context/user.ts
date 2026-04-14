@@ -1,4 +1,4 @@
-import type { PrismaClient } from "../generated/prisma/client.js";
+import type { PrismaClient } from "@prisma/client";
 import { validateSessionToken } from "../auth/session/index.js";
 
 export async function getUserContext({
