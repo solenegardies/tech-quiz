@@ -21,12 +21,9 @@ COPY --from=build /app/apps/server/dist ./apps/server/dist
 COPY --from=build /app/apps/server/prisma ./apps/server/prisma
 COPY --from=build /app/apps/server/node_modules ./apps/server/node_modules
 COPY --from=build /app/apps/server/package.json ./apps/server/
-COPY --from=build /app/packages/shared/dist ./packages/shared/dist
-COPY --from=build /app/packages/shared/package.json ./packages/shared/
 COPY --from=build /app/node_modules ./node_modules
-RUN rm -rf apps/server/node_modules/@tech-quiz/shared && \
-    mkdir -p apps/server/node_modules/@tech-quiz && \
-    ln -s ../../../../packages/shared apps/server/node_modules/@tech-quiz/shared
+COPY --from=build /app/packages/shared/dist ./apps/server/node_modules/@tech-quiz/shared/dist
+COPY --from=build /app/packages/shared/package.json ./apps/server/node_modules/@tech-quiz/shared/
 
 EXPOSE 3001
 
