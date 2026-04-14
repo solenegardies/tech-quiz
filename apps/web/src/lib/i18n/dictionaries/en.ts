@@ -174,6 +174,7 @@ export const en = {
     hideAnswer: "Hide answer",
     showAnswer: "Show answer",
     seeDetailedAnswer: "See the \"Detailed answer\" section below.",
+    interviewReflex: "Interview reflex",
   },
   pwa: {
     installTitle: "Install TechQuiz",
@@ -231,6 +232,9 @@ export const en = {
     toValidate: "To validate",
     expectedPoints: "Expected points",
     commonMistakes: "Common mistakes",
+    interviewReflex: "Interview reflex",
+    relatedTerms: "Related terms",
+    resources: "Resources",
     validateMyAnswer: "I validate my answer",
     needsWork: "Needs rework",
     seeSummary: "See summary",

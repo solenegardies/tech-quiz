@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-function renderInlineMarkdown(text: string): ReactNode[] {
+export function renderInlineMarkdown(text: string): ReactNode[] {
   const nodes: ReactNode[] = [];
   const pattern = /(\*\*(.+?)\*\*)|(`([^`]+)`)/g;
   let lastIndex = 0;
@@ -73,13 +73,48 @@ function parseBlocks(content: string): Block[] {
   return blocks;
 }
 
+function splitSections(text: string): string[] {
+  const sections: string[] = [];
+  const raw = text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+
+  for (const paragraph of raw) {
+    const headingMatch = paragraph.match(/^(#{1,6})\s+.+/);
+    if (headingMatch) {
+      const firstNewline = paragraph.indexOf("\n");
+      if (firstNewline !== -1) {
+        sections.push(paragraph.slice(0, firstNewline).trim());
+        const rest = paragraph.slice(firstNewline + 1).trim();
+        if (rest) sections.push(rest);
+      } else {
+        sections.push(paragraph);
+      }
+    } else {
+      sections.push(paragraph);
+    }
+  }
+
+  return sections;
+}
+
 function renderTextBlock(text: string, blockIndex: number) {
-  const paragraphs = text
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
+  const paragraphs = splitSections(text);
 
   return paragraphs.map((paragraph, paragraphIndex) => {
+    const headingMatch = paragraph.match(/^(#{1,6})\s+(.+)$/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const headingText = headingMatch[2];
+      const className =
+        level <= 2
+          ? "font-display text-lg font-bold text-[color:var(--text-strong)]"
+          : "font-display text-base font-semibold text-[color:var(--text-strong)]";
+      return (
+        <h3 key={`${blockIndex}-${paragraphIndex}`} className={className}>
+          {renderInlineMarkdown(headingText)}
+        </h3>
+      );
+    }
+
     const lines = paragraph.split("\n").map((line) => line.trim());
     const isList = lines.every((line) => line.startsWith("- ") || line.startsWith("* "));
 

@@ -5,6 +5,7 @@ import type {
   BrowseParams,
   BrowseResult,
   Difficulty,
+  LabeledCodeSnippet,
   McqQuestion,
   QuestionCodeSnippet,
   QuestionFormat,
@@ -23,6 +24,20 @@ interface RawResource {
   domain: string;
 }
 
+interface RawRelatedResource {
+  id: string;
+  label: string;
+  url: string;
+  authority: string;
+  domain: string;
+}
+
+interface RawCodeSnippetItem {
+  label: string;
+  language: string;
+  code: string;
+}
+
 interface RawQuestionBase {
   id: string;
   source_section: string;
@@ -38,8 +53,12 @@ interface RawQuestionBase {
   reference_answer_md: string;
   common_mistakes: string[];
   code_snippet: string | { language: string; code: string };
+  code_snippets: RawCodeSnippetItem[];
+  key_points: string[];
+  interview_reflex: string;
   related_terms: string[];
   resource_ids: string[];
+  related_resources: RawRelatedResource[];
   source_lists: string[];
   answer_style: string;
   allows_multiple_answers: boolean;
@@ -66,7 +85,7 @@ interface RawDataset {
 
 const DATASET_PATH = path.resolve(
   process.cwd(),
-  "../server/prisma/seed-data/fullstack_ts_interview_question_bank_2026_improved.json",
+  "../server/prisma/seed-data/fullstack_ts_interview_question_bank_2026_enriched_v4.json",
 );
 
 function toLabel(value: string) {
@@ -99,7 +118,32 @@ function normalizeCodeSnippet(raw: string | { language: string; code: string }):
   return { language: raw.language, code: raw.code };
 }
 
+function normalizeRelatedResources(raw: RawRelatedResource[]): QuestionResource[] {
+  return raw.map((resource) => ({
+    id: resource.id,
+    title: resource.label,
+    url: resource.url,
+    authority: resource.authority,
+    domain: resource.domain,
+  }));
+}
+
+function normalizeCodeSnippets(raw: RawCodeSnippetItem[]): LabeledCodeSnippet[] {
+  return raw.map((snippet) => ({
+    label: snippet.label,
+    language: snippet.language,
+    code: snippet.code,
+  }));
+}
+
 function normalizeQuestion(raw: RawQuestion, resourcesById: Map<string, QuestionResource>): QuizQuestion {
+  const codeSnippets = normalizeCodeSnippets(raw.code_snippets ?? []);
+  const resources = raw.related_resources?.length
+    ? normalizeRelatedResources(raw.related_resources)
+    : raw.resource_ids
+        .map((resourceId) => resourcesById.get(resourceId))
+        .filter((resource): resource is QuestionResource => Boolean(resource));
+
   const shared = {
     id: raw.id,
     slug: raw.slug,
@@ -115,11 +159,14 @@ function normalizeQuestion(raw: RawQuestion, resourcesById: Map<string, Question
     expectedAnswerPoints: raw.expected_answer_points,
     referenceAnswerMd: raw.reference_answer_md,
     commonMistakes: raw.common_mistakes,
-    codeSnippet: normalizeCodeSnippet(raw.code_snippet),
+    codeSnippet: codeSnippets.length
+      ? { language: codeSnippets[0].language, code: codeSnippets[0].code }
+      : normalizeCodeSnippet(raw.code_snippet),
+    codeSnippets,
+    keyPoints: raw.key_points ?? [],
+    interviewReflex: raw.interview_reflex ?? "",
     relatedTerms: raw.related_terms,
-    resources: raw.resource_ids
-      .map((resourceId) => resourcesById.get(resourceId))
-      .filter((resource): resource is QuestionResource => Boolean(resource)),
+    resources,
     formatLabel: formatLabel(raw.question_format),
     searchText: [
       raw.term,
@@ -128,6 +175,7 @@ function normalizeQuestion(raw: RawQuestion, resourcesById: Map<string, Question
       raw.source_section,
       raw.related_terms.join(" "),
       raw.expected_answer_points.join(" "),
+      (raw.key_points ?? []).join(" "),
     ]
       .join(" ")
       .toLowerCase(),

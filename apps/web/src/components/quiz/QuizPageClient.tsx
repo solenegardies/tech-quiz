@@ -7,7 +7,7 @@ import { useTranslation } from "@/lib/i18n";
 import { Button } from "@/components/ui/Button";
 import { QuestionCodeBlock } from "@/components/questions/QuestionCodeBlock";
 import { QuestionMetaStrip } from "@/components/questions/QuestionMetaStrip";
-import { QuestionRichText } from "@/components/questions/QuestionRichText";
+import { QuestionRichText, renderInlineMarkdown } from "@/components/questions/QuestionRichText";
 import { ReviewToggleButton } from "@/components/questions/ReviewToggleButton";
 import type { QuestionMeta, QuizQuestion, Difficulty } from "@/lib/questions/types";
 import {
@@ -700,7 +700,7 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
                   setSelectedOptionIndexes([index]);
                 }}
                 style={{ animationDelay: `${index * 60}ms` }}
-                className={`animate-option-in w-full flex items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left text-sm leading-6 transition select-none ${
+                className={`${answerRevealed ? "" : "animate-option-in"} w-full flex items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left text-sm leading-6 transition select-none ${
                   answerRevealed
                     ? isCorrectOption
                       ? "border-[color:var(--success)] bg-[color:var(--success-soft)] animate-correct-pop"
@@ -742,7 +742,7 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
                   </span>
                 ) : null}
 
-                <span className="font-medium text-[color:var(--text-strong)]">{option.text}</span>
+                <span className="font-medium text-[color:var(--text-strong)]">{renderInlineMarkdown(option.text)}</span>
               </button>
             );
           })}
@@ -775,7 +775,7 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
                 type="button"
                 disabled={answerRevealed}
                 onClick={() => setSelectedBoolean(value)}
-                className={`animate-option-in btn-raised group relative overflow-hidden rounded-2xl border-2 px-6 py-8 text-center transition select-none ${
+                className={`${answerRevealed ? "" : "animate-option-in"} btn-raised group relative overflow-hidden rounded-2xl border-2 px-6 py-8 text-center transition select-none ${
                   answerRevealed
                     ? isCorrectChoice
                       ? "border-[color:var(--success)] bg-[color:var(--success-soft)] animate-correct-pop"
@@ -930,7 +930,7 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
               {currentQuestion.expectedAnswerPoints.map((point) => (
                 <li key={point} className="flex gap-2">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--accent)]" />
-                  <span>{point}</span>
+                  <span>{renderInlineMarkdown(point)}</span>
                 </li>
               ))}
             </ul>
@@ -944,12 +944,72 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
               {currentQuestion.commonMistakes.map((mistake) => (
                 <li key={mistake} className="flex gap-2">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--warning)]" />
-                  <span>{mistake}</span>
+                  <span>{renderInlineMarkdown(mistake)}</span>
                 </li>
               ))}
             </ul>
           </div>
         </div>
+
+        {currentQuestion.interviewReflex ? (
+          <div className="mt-4 rounded-xl border border-[color:var(--accent-border)] bg-[color:var(--accent-soft,white/55)] p-5">
+            <p className="flex items-center gap-2 text-sm font-bold text-[color:var(--text-strong)]">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--accent)] text-xs text-white">!</span>
+              {t.quiz.interviewReflex}
+            </p>
+            <p className="mt-3 text-sm leading-6 text-[color:var(--text-strong)]">
+              {currentQuestion.interviewReflex}
+            </p>
+          </div>
+        ) : null}
+
+        {(currentQuestion.relatedTerms.length > 0 || currentQuestion.resources.length > 0) && (
+          <div className="mt-4 grid gap-4 lg:grid-cols-2">
+            {currentQuestion.relatedTerms.length > 0 && (
+              <div className="rounded-xl bg-white/55 p-5">
+                <p className="flex items-center gap-2 text-sm font-bold text-[color:var(--text-strong)]">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--sky)] text-xs text-white">~</span>
+                  {t.quiz.relatedTerms}
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {currentQuestion.relatedTerms.map((term) => (
+                    <span
+                      key={term}
+                      className="rounded-full border border-[color:var(--border)] bg-white/70 px-3 py-1 text-sm font-medium text-[color:var(--text-strong)]"
+                    >
+                      {term}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {currentQuestion.resources.length > 0 && (
+              <div className="rounded-xl bg-white/55 p-5">
+                <p className="flex items-center gap-2 text-sm font-bold text-[color:var(--text-strong)]">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--accent)] text-xs text-white">+</span>
+                  {t.quiz.resources}
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {currentQuestion.resources.map((resource) => (
+                    <li key={resource.id}>
+                      <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block rounded-lg border border-[color:var(--border)] bg-white/70 px-3 py-2 transition hover:border-[color:var(--accent)]"
+                      >
+                        <p className="text-sm font-semibold text-[color:var(--text-strong)]">{resource.title}</p>
+                        <p className="mt-0.5 text-xs text-[color:var(--text-soft)]">
+                          {resource.authority} · {resource.domain}
+                        </p>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         {currentQuestion.questionFormat === "free_text" && isPending ? (
           <div className="mt-6 flex flex-wrap gap-3">
@@ -1045,7 +1105,7 @@ export function QuizPageClient({ meta, resumeRequested = false }: QuizPageClient
                   {currentQuestion.term}
                 </p>
                 <h2 className="font-display text-2xl font-bold leading-snug text-[color:var(--text-strong)] sm:text-3xl">
-                  {currentQuestion.prompt}
+                  {renderInlineMarkdown(currentQuestion.prompt)}
                 </h2>
               </div>
 

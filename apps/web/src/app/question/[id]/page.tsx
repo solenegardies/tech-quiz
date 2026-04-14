@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { QuestionCodeBlock } from "@/components/questions/QuestionCodeBlock";
 import { QuestionMetaStrip } from "@/components/questions/QuestionMetaStrip";
 import { QuestionOptions } from "@/components/questions/QuestionOptions";
-import { QuestionRichText } from "@/components/questions/QuestionRichText";
+import { QuestionRichText, renderInlineMarkdown } from "@/components/questions/QuestionRichText";
 import { ReviewToggleButton } from "@/components/questions/ReviewToggleButton";
 import { getQuestionById } from "@/lib/questions/data";
 import { getDictionary } from "@/lib/i18n";
@@ -46,11 +46,21 @@ export default async function QuestionDetailPage({
               {question.term}
             </p>
             <h1 className="mt-3 font-display text-2xl font-bold tracking-tight text-[color:var(--text-strong)] sm:text-3xl">
-              {question.prompt}
+              {renderInlineMarkdown(question.prompt)}
             </h1>
             <p className="mt-3 text-sm leading-6 text-[color:var(--text-soft)]">{question.sourceSection}</p>
 
-            {question.codeSnippet ? (
+            {question.codeSnippets.length > 0 ? (
+              <div className="mt-6 space-y-4">
+                {question.codeSnippets.map((snippet) => (
+                  <QuestionCodeBlock
+                    key={snippet.label}
+                    snippet={{ language: snippet.language, code: snippet.code }}
+                    label={snippet.label}
+                  />
+                ))}
+              </div>
+            ) : question.codeSnippet ? (
               <div className="mt-6">
                 <QuestionCodeBlock snippet={question.codeSnippet} />
               </div>
@@ -75,7 +85,21 @@ export default async function QuestionDetailPage({
             </div>
           </section>
 
+          {question.interviewReflex ? (
+            <section className="rounded-2xl border-2 border-[color:var(--accent-border)] bg-[color:var(--accent-soft,var(--surface-muted))] p-6">
+              <h2 className="flex items-center gap-2 font-display text-xl font-bold text-[color:var(--text-strong)]">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[color:var(--accent)] text-xs font-bold text-white">!</span>
+                {t.questionDetail.interviewReflex}
+              </h2>
+              <p className="mt-4 text-sm leading-6 text-[color:var(--text-strong)]">
+                {question.interviewReflex}
+              </p>
+            </section>
+          ) : null}
+
+          {(question.expectedAnswerPoints.length > 0 || question.commonMistakes.length > 0) && (
           <div className="grid gap-5 lg:grid-cols-2">
+            {question.expectedAnswerPoints.length > 0 && (
             <section className="rounded-xl border-2 border-[color:var(--success-border)] bg-[color:var(--success-soft)] p-6">
               <h2 className="flex items-center gap-2 font-display text-lg font-bold text-[color:var(--text-strong)]">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--success)] text-xs font-bold text-white">V</span>
@@ -85,12 +109,14 @@ export default async function QuestionDetailPage({
                 {question.expectedAnswerPoints.map((point) => (
                   <li key={point} className="flex gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--success)]" />
-                    <span>{point}</span>
+                    <span>{renderInlineMarkdown(point)}</span>
                   </li>
                 ))}
               </ul>
             </section>
+            )}
 
+            {question.commonMistakes.length > 0 && (
             <section className="rounded-xl border-2 border-[color:var(--warning-border)] bg-[color:var(--warning-soft)] p-6">
               <h2 className="flex items-center gap-2 font-display text-lg font-bold text-[color:var(--text-strong)]">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--warning)] text-xs font-bold text-white">!</span>
@@ -100,67 +126,63 @@ export default async function QuestionDetailPage({
                 {question.commonMistakes.map((mistake) => (
                   <li key={mistake} className="flex gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--warning)]" />
-                    <span>{mistake}</span>
+                    <span>{renderInlineMarkdown(mistake)}</span>
                   </li>
                 ))}
               </ul>
             </section>
+            )}
           </div>
+          )}
 
+          {(question.relatedTerms.length > 0 || question.resources.length > 0) && (
           <div className="grid gap-5 lg:grid-cols-2">
+            {question.relatedTerms.length > 0 && (
             <section className="rounded-xl border-2 border-[color:var(--border)] bg-[color:var(--surface-muted)] p-6">
               <h2 className="flex items-center gap-2 font-display text-lg font-bold text-[color:var(--text-strong)]">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--sky)] text-xs font-bold text-white">~</span>
                 {t.questionDetail.relatedTerms}
               </h2>
-              {question.relatedTerms.length ? (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {question.relatedTerms.map((term) => (
-                    <span
-                      key={term}
-                      className="rounded-full border-2 border-[color:var(--border)] bg-white/70 px-3 py-1.5 text-sm font-medium text-[color:var(--text-strong)]"
-                    >
-                      {term}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="mt-4 text-sm leading-6 text-[color:var(--text-soft)]">
-                  {t.questionDetail.noRelatedTerms}
-                </p>
-              )}
+              <div className="mt-4 flex flex-wrap gap-2">
+                {question.relatedTerms.map((term) => (
+                  <span
+                    key={term}
+                    className="rounded-full border-2 border-[color:var(--border)] bg-white/70 px-3 py-1.5 text-sm font-medium text-[color:var(--text-strong)]"
+                  >
+                    {term}
+                  </span>
+                ))}
+              </div>
             </section>
+            )}
 
+            {question.resources.length > 0 && (
             <section className="rounded-xl border-2 border-[color:var(--border)] bg-[color:var(--surface-muted)] p-6">
               <h2 className="flex items-center gap-2 font-display text-lg font-bold text-[color:var(--text-strong)]">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--accent)] text-xs font-bold text-white">+</span>
                 {t.questionDetail.resources}
               </h2>
-              {question.resources.length ? (
-                <ul className="mt-4 space-y-3">
-                  {question.resources.map((resource) => (
-                    <li key={resource.id}>
-                      <a
-                        href={resource.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="block rounded-xl border-2 border-[color:var(--border)] bg-white/70 px-4 py-3 transition hover:border-[color:var(--accent)] hover:-translate-y-0.5"
-                      >
-                        <p className="font-semibold text-[color:var(--text-strong)]">{resource.title}</p>
-                        <p className="mt-1 text-xs text-[color:var(--text-soft)]">
-                          {resource.authority} · {resource.domain}
-                        </p>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-4 text-sm leading-6 text-[color:var(--text-soft)]">
-                  {t.questionDetail.noResources}
-                </p>
-              )}
+              <ul className="mt-4 space-y-3">
+                {question.resources.map((resource) => (
+                  <li key={resource.id}>
+                    <a
+                      href={resource.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-xl border-2 border-[color:var(--border)] bg-white/70 px-4 py-3 transition hover:border-[color:var(--accent)] hover:-translate-y-0.5"
+                    >
+                      <p className="font-semibold text-[color:var(--text-strong)]">{resource.title}</p>
+                      <p className="mt-1 text-xs text-[color:var(--text-soft)]">
+                        {resource.authority} · {resource.domain}
+                      </p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </section>
+            )}
           </div>
+          )}
         </div>
       </main>
     </div>

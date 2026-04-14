@@ -9,9 +9,7 @@ COPY packages/shared/package.json packages/shared/
 RUN pnpm install --frozen-lockfile --filter @tech-quiz/server...
 
 FROM base AS build
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/server/node_modules ./apps/server/node_modules
-COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
+COPY --from=deps /app ./
 COPY . .
 RUN pnpm --filter @tech-quiz/server exec prisma generate
 RUN pnpm --filter @tech-quiz/server run build

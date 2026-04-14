@@ -14,6 +14,12 @@ export interface QuestionCodeSnippet {
   code: string;
 }
 
+export interface LabeledCodeSnippet {
+  label: string;
+  language: string;
+  code: string;
+}
+
 interface QuestionBase {
   id: string;
   slug: string;
@@ -30,6 +36,9 @@ interface QuestionBase {
   referenceAnswerMd: string;
   commonMistakes: string[];
   codeSnippet: QuestionCodeSnippet;
+  codeSnippets: LabeledCodeSnippet[];
+  keyPoints: string[];
+  interviewReflex: string;
   relatedTerms: string[];
   resources: QuestionResource[];
   formatLabel: string;

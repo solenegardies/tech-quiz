@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { renderInlineMarkdown, QuestionRichText } from "@/components/questions/QuestionRichText";
 import type { QuizQuestion } from "@/lib/questions/types";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
@@ -61,9 +62,7 @@ export function QuestionOptions({ question }: { question: QuizQuestion }) {
         </div>
         {revealed && question.booleanExplanation && (
           <div className="rounded-xl border-2 border-[color:var(--border)] bg-[color:var(--surface-muted)] p-4">
-            <p className="text-sm leading-6 text-[color:var(--text-soft)]">
-              {question.booleanExplanation}
-            </p>
+            <QuestionRichText content={question.booleanExplanation} />
           </div>
         )}
       </div>
@@ -121,11 +120,14 @@ function OptionButton({
 
   if (revealed) {
     if (isCorrect) {
-      borderClass = "border-[color:var(--success-border)] bg-[color:var(--success-soft)]";
+      borderClass = "border-[color:var(--success)] bg-[color:var(--success-soft)]";
       letterBg = "bg-[color:var(--success)] text-white";
     } else if (selected) {
-      borderClass = "border-red-300 bg-red-50";
-      letterBg = "bg-red-500 text-white";
+      borderClass = "border-[color:var(--danger)] bg-[color:var(--danger-soft)]";
+      letterBg = "bg-[color:var(--danger)] text-white";
+    } else {
+      borderClass = "border-[color:var(--border)] bg-[color:var(--surface-muted)] opacity-60";
+      letterBg = "bg-[color:var(--surface-muted)] text-[color:var(--text-soft)]";
     }
   }
 
@@ -141,10 +143,10 @@ function OptionButton({
       <span
         className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold ${letterBg}`}
       >
-        {letter}
+        {revealed && isCorrect ? "✓" : revealed && selected ? "✗" : letter}
       </span>
       <span className="text-sm font-medium leading-6 text-[color:var(--text-strong)]">
-        {label}
+        {renderInlineMarkdown(label)}
       </span>
     </button>
   );

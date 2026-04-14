@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useTranslation } from "@/lib/i18n";
 import { QuestionMetaStrip } from "@/components/questions/QuestionMetaStrip";
-import { QuestionRichText } from "@/components/questions/QuestionRichText";
+import { QuestionRichText, renderInlineMarkdown } from "@/components/questions/QuestionRichText";
 import { ReviewToggleButton } from "@/components/questions/ReviewToggleButton";
 import type { QuizQuestion } from "@/lib/questions/types";
 
@@ -18,7 +18,7 @@ function CorrectAnswerBadge({ question, t }: { question: QuizQuestion; t: Return
             key={`correct-${i}`}
             className="inline-flex items-center gap-1 rounded-lg border border-[color:var(--success-border)] bg-[color:var(--success-soft)] px-2 py-0.5 text-xs font-semibold text-[color:var(--success-strong)]"
           >
-            {opt.text}
+            {renderInlineMarkdown(opt.text)}
           </span>
         ))}
       </div>
@@ -65,7 +65,7 @@ export function BrowseQuestionCard({ question }: { question: QuizQuestion }) {
             <QuestionMetaStrip question={question} />
           </div>
           <h3 className="mt-2 text-[15px] font-bold leading-snug text-[color:var(--text-strong)]">
-            {question.prompt}
+            {renderInlineMarkdown(question.prompt)}
           </h3>
           <p className="mt-1 text-xs text-[color:var(--text-soft)]">
             {question.term} &middot; {question.sourceSection}
@@ -107,7 +107,7 @@ export function BrowseQuestionCard({ question }: { question: QuizQuestion }) {
                   {question.expectedAnswerPoints.map((point) => (
                     <li key={point} className="flex gap-2">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[color:var(--success)]" />
-                      <span>{point}</span>
+                      <span>{renderInlineMarkdown(point)}</span>
                     </li>
                   ))}
                 </ul>
@@ -124,7 +124,7 @@ export function BrowseQuestionCard({ question }: { question: QuizQuestion }) {
                   {question.commonMistakes.map((mistake) => (
                     <li key={mistake} className="flex gap-2">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[color:var(--warning)]" />
-                      <span>{mistake}</span>
+                      <span>{renderInlineMarkdown(mistake)}</span>
                     </li>
                   ))}
                 </ul>

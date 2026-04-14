@@ -176,6 +176,7 @@ export const fr: Dictionary = {
     hideAnswer: "Masquer la r\u00E9ponse",
     showAnswer: "Voir la r\u00E9ponse",
     seeDetailedAnswer: "Consultez la section \u00AB\u00A0R\u00E9ponse d\u00E9taill\u00E9e\u00A0\u00BB ci-dessous.",
+    interviewReflex: "R\u00E9flexe entretien",
   },
   pwa: {
     installTitle: "Installer TechQuiz",
@@ -233,6 +234,9 @@ export const fr: Dictionary = {
     toValidate: "\u00C0 valider",
     expectedPoints: "Points attendus",
     commonMistakes: "Erreurs fr\u00E9quentes",
+    interviewReflex: "R\u00E9flexe entretien",
+    relatedTerms: "Termes li\u00E9s",
+    resources: "Ressources",
     validateMyAnswer: "Je valide ma r\u00E9ponse",
     needsWork: "\u00C0 retravailler",
     seeSummary: "Voir le r\u00E9cap",
