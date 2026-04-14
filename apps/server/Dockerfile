@@ -24,6 +24,9 @@ COPY --from=build /app/apps/server/package.json ./apps/server/
 COPY --from=build /app/packages/shared/dist ./packages/shared/dist
 COPY --from=build /app/packages/shared/package.json ./packages/shared/
 COPY --from=build /app/node_modules ./node_modules
+RUN rm -rf apps/server/node_modules/@tech-quiz/shared && \
+    mkdir -p apps/server/node_modules/@tech-quiz && \
+    ln -s ../../../../packages/shared apps/server/node_modules/@tech-quiz/shared
 
 EXPOSE 3001
 
